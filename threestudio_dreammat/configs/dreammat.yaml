@@ -1,0 +1,130 @@
+name: "dream_mat"
+tag: "${rmspace:${system.prompt_processor.prompt},_}"
+exp_root_dir: "outputs"
+seed: 0
+
+data_type: "random-camera-datamodule"
+data:
+  batch_size: 1
+  width: 512
+  height: 512
+  camera_distance_range: [3.0, 4.0]
+  fovy_range: [25, 45]
+  camera_perturb: 0.
+  center_perturb: 0.
+  up_perturb: 0.
+  elevation_range: [-20, 45]
+  azimuth_range: [-180, 180]
+  batch_uniform_azimuth: true
+  eval_camera_distance: 4.0
+  eval_fovy_deg: 30.
+  n_val_views: 1
+  use_fix_views: true
+  blender_generate: ???
+  fix_view_num: 128
+  fix_env_num: 5
+
+
+system_type: "dreammat-system"
+system:
+  init_step: 0 
+  init_width: 512
+  init_height: 512
+  save_train_image: true
+  save_train_image_iter: 1000
+
+  geometry_type: "dreammat-mesh"
+  geometry:
+    radius: 1.0 
+    shape_init: ???
+    shape_init_params: ???
+    shape_init_mesh_up: +y
+    shape_init_mesh_front: +z
+    pos_encoding_config:
+      otype: HashGrid 
+      n_levels: 16
+      n_features_per_level: 2
+      log2_hashmap_size: 19
+      base_resolution: 16
+      per_level_scale: 1.447269237440378
+
+    n_input_dims: 3 # uv
+    n_feature_dims: 5 # albedo3 + roughness1 + metallic1
+
+  guidance_type: "stable-diffusion-triple-guidance" 
+  guidance:
+    use_controlnet: true
+    width: 512
+    height: 512
+    cache_dir: "../../model/SD" # path to SD model
+    pretrained_model_name_or_path: "stabilityai/stable-diffusion-2-1-base"
+    controlnet_path: "../../model/controlnet" # path to controlnet
+    control_types: ['light']
+    cond_scale: 1.05
+    uncond_scale: [0, -1.0, -0.5, 2000]  
+    null_scale: [0, 0.0, -0.5, 2000] 
+    noise_scale: 0.0
+    min_step_percent: [500, 0.2, 0.02, 501]
+    max_step_percent: [500, 0.8, 0.5, 501] 
+    control_anneal_start_step: 700
+    condition_scales: [1.0] 
+    condition_scales_anneal: [0.8]
+
+
+  prompt_processor_type: "stable-diffusion-prompt-processor"
+  prompt_processor:
+    pretrained_model_name_or_path: "stabilityai/stable-diffusion-2-1-base" 
+    pretrained_model_cache_dir: "../../model/SD" # path to SD model
+    prompt: ???
+    negative_prompt: "oversaturated color, ugly, tiling, poorly drawn hands, poorly drawn feet, poorly drawn face, poorly drawn eyes, low contrast, underexposed, overexposed, bright blue spots, glowing blue patches, intense blue highlights, Unrealistic highlights, Artificial shininess, Exaggerated light reflections, Unnatural facial expression, Inauthentic eye contact, low resolution"
+    use_env_prompt: false
+    env_prompts_path: "load/lights/envmap"
+
+  material_type: "dreammat-material"
+  material:
+    material_activation: sigmoid
+    environment_texture: "load/lights/envmap"
+    environment_scale: 2.0
+    min_metallic: 0.0
+    max_metallic: 0.9
+    min_roughness_squre: 0.01
+    max_roughness_squre: 0.9
+    use_bump: false
+    use_raytracing: true
+    diffuse_sample_num: 200
+    specular_sample_num: 128
+
+  background_type: "solid-color-background" #"neural-environment-map-background"
+
+  renderer_type: "raytracing-renderer"
+  renderer:
+    context_type: cuda
+
+  loggers:
+    wandb:
+      enable: false
+      project: "threestudio"
+
+  loss:
+    lambda_sds: 1.0 
+    lambda_mat_reg: 1.0
+
+  optimizer:
+    name: Adam
+    args:
+      betas: [0.9, 0.99]
+      eps: 1.e-15
+      lr: 0.01  
+
+trainer:
+  max_steps: 30000
+  log_every_n_steps: 1
+  num_sanity_val_steps: 1
+  val_check_interval: 100
+  enable_progress_bar: true
+  precision: 32
+
+checkpoint:
+  save_last: false
+  save_top_k: -1
+  every_n_train_steps: 3999

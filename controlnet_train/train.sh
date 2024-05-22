@@ -1,0 +1,1 @@
+accelerate launch diffusers_train_controlnet.py --config config.json 

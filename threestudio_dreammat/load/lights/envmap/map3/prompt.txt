@@ -1,0 +1,3 @@
+soft lighting
+HDRIs， Indoor， Natural Light， Brown Photostudio
+HDRIs， Indoor， Natural Light

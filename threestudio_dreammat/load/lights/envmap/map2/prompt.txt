@@ -1,0 +1,3 @@
+soft lighting
+indoor lighting，sunlight through window
+HDRIs，indoor studio，sunlight through window

@@ -1,0 +1,33 @@
+{
+    "pretrained_model_name_or_path":"stabilityai/stable-diffusion-2-1-base",
+    "use_cfg":false,
+    "train_data_dir": "dataset_example/training_data",
+    "prompt_file_path": "dataset_example/prompts/prompts.json",
+    "sd_cache_dir":"../../model/SD",
+    "controlnet_dir":"../../model/controlnet",
+    "pipeline_cache_dir": "../../model/pipeline",
+    "validation_path":"dataset_example/testing",
+    "validate_log_dir":"validate_log",
+    "num_validation_images":4,
+    "validation_steps":1000,
+    "checkpointing_steps":10000,
+    "train_unet_textencoder":false,
+
+    "revision":null,
+    "tokenizer_name":null,
+    "seed":0,
+    "resolution":256,
+    "train_batch_size":32,
+    "num_train_epochs":3,
+    
+    "resume_from_checkpoint":null,
+    "gradient_accumulation_steps":1,
+    "learning_rate":1e-5,
+    "lr_scheduler":"constant",
+    "lr_warmup_steps":500,
+    "lr_num_cycles":1,
+    "lr_power":1.0,
+    "dataloader_num_workers":0,
+    "mixed_precision": null
+
+}

@@ -1,0 +1,3 @@
+soft lighting
+outdoor lighting，low contrast skies，pure clean sky
+HDRIs，outdoor，low contrast skies，pure clean sky
