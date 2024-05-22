@@ -101,6 +101,10 @@ class DreamMatMesh(BaseExplicitGeometry):
                 "base_resolution": 16,
                 "per_level_scale": 1.447269237440378,
             }
+            # default_factory=lambda: {
+            #     "otype": "Frequency", 
+	        #     "n_frequencies": 10
+            # }
         )
         mlp_network_config: dict = field(
             default_factory=lambda: {
@@ -199,7 +203,7 @@ class DreamMatMesh(BaseExplicitGeometry):
             v_normal = torch.tensor(np.ascontiguousarray(mesh.vertex_normals), dtype=torch.float32).to(self.device)
             v_tex = torch.tensor(mesh.visual.uv, dtype=torch.float32).to(self.device)
                 
-            self.mesh = Mesh(v_pos=v_pos,t_pos_idx=t_pos_idx, v_nrm=v_normal, v_tex=v_tex)
+            self.mesh = Mesh(v_pos=v_pos,t_pos_idx=t_pos_idx, v_nrm=v_normal, v_tex=v_tex, t_tex_idx=t_pos_idx)
             self.register_buffer(
                 "v_buffer",
                 v_pos,

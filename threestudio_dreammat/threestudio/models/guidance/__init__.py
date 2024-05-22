@@ -1,4 +1,5 @@
 from . import (
+    dreammat_guidance,
     csd_guidance,
     deep_floyd_guidance,
     instructpix2pix_guidance,

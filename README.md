@@ -13,11 +13,17 @@ DreamMat: High-quality PBR Material Generation with Geometry- and Light-aware Di
     ```
 2. Install Blender 
 
-    Download and Install [blender-3.2.2-linux-x64.tar.xz](https://download.blender.org/release/Blender3.2/)
+    Download [blender-3.2.2-linux-x64.tar.xz](https://download.blender.org/release/Blender3.2/)
+    
+    Run:
+    ```bash
+    tar -xvf blender-3.2.2-linux-x64.tar.xz
+    export PATH=$PATH:path_to_blender/blender-3.2.2-linux-x64
+    ```
 
-    Run`export PATH=$PATH:path_to_blender/blender-3.2.2-linux-x64`
 
-3. Download checkpoints [here](https://pan.zju.edu.cn/share/5b7f4cd191248e775e693291a7) or from hugging face
+3. Download the pre-trained ControlNet checkpoints [here](https://pan.zju.edu.cn/share/5b7f4cd191248e775e693291a7) or from hugging face, put it to the path same as in `threestudio_dreammat/configs/dreammat.yaml`
+
 
 ### Inference
 

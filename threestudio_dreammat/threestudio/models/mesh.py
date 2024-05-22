@@ -11,13 +11,13 @@ from threestudio.utils.typing import *
 
 class Mesh:
     def __init__(
-        self, v_pos: Float[Tensor, "Nv 3"], t_pos_idx: Integer[Tensor, "Nf 3"], v_nrm:Float[Tensor, "Nv 3"], v_tex: Float[Tensor, "Nt 2"], **kwargs
+        self, v_pos: Float[Tensor, "Nv 3"], t_pos_idx: Integer[Tensor, "Nf 3"], v_nrm:Float[Tensor, "Nv 3"], v_tex: Float[Tensor, "Nt 2"], t_tex_idx: Integer[Tensor, "Nf 3"], **kwargs
     ) -> None:
         self.v_pos: Float[Tensor, "Nv 3"] = v_pos
         self.t_pos_idx: Integer[Tensor, "Nf 3"] = t_pos_idx
         self._v_nrm: Float[Tensor, "Nv 3"] = v_nrm
         self._v_tex: Float[Tensor, "Nt 2"] = v_tex
-        self._t_tex_idx: Float[Tensor, "Nf 3"] = t_pos_idx
+        self._t_tex_idx: Integer[Tensor, "Nf 3"] = t_tex_idx
         self._v_tng: Optional[Float[Tensor, "Nv 3"]] = None
         self._v_rgb: Optional[Float[Tensor, "Nv 3"]] = None
         self._edges: Optional[Integer[Tensor, "Ne 2"]] = None
@@ -245,10 +245,10 @@ class Mesh:
     def unwrap_uv(
         self, xatlas_chart_options: dict = {}, xatlas_pack_options: dict = {}
     ):
-        #if self._v_tex is None:
-        self._v_tex, self._t_tex_idx = self._unwrap_uv(
-            xatlas_chart_options, xatlas_pack_options
-        )
+        if self._v_tex is None:
+            self._v_tex, self._t_tex_idx = self._unwrap_uv(
+                xatlas_chart_options, xatlas_pack_options
+            )
 
     def set_vertex_color(self, v_rgb):
         assert v_rgb.shape[0] == self.v_pos.shape[0]

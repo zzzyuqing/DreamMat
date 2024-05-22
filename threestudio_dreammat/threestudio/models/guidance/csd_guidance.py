@@ -47,8 +47,8 @@ class StableDiffusionCSDGuidance(BaseObject):
     class Config(BaseObject.Config):
         width:int=512
         height:int=512
-        cache_dir: str = "../../model/SD"
-        pretrained_model_name_or_path: str = "runwayml/stable-diffusion-v1-5"
+        cache_dir: str = None
+        pretrained_model_name_or_path: str = "stabilityai/stable-diffusion-2-1-base"
         controlnet_path:str = None
         enable_memory_efficient_attention: bool = False
         enable_sequential_cpu_offload: bool = False
