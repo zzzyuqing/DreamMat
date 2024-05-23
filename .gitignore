@@ -158,3 +158,35 @@ cython_debug/
 #  and can be added to the global gitignore or merged into this file.  For a more nuclear
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
+
+### Python Patch ###
+# Poetry local configuration file - https://python-poetry.org/docs/configuration/#local-configuration
+poetry.toml
+
+# ruff
+threestudio_dreammat/.ruff_cache/
+
+# LSP config files
+threestudio_dreammat/pyrightconfig.json
+
+# End of https://www.toptal.com/developers/gitignore/api/python
+
+threestudio_dreammat/.vscode/
+threestudio_dreammat/.threestudio_cache/
+threestudio_dreammat/outputs/
+threestudio_dreammat/outputs-gradio/
+
+# pretrained model weights
+*.ckpt
+*.pt
+*.pth
+
+# wandb
+threestudio_dreammat/wandb/
+
+# vscode
+threestudio_dreammat/.code-workspace
+
+threestudio_dreammat/custom/*
+
+threestudio_dreammat/load/tets/256_tets.npz

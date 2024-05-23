@@ -103,8 +103,6 @@ class RaytraceRender(Rasterizer):
         self.ray_tracer = RayTracer(self.mesh.v_pos, self.mesh.t_pos_idx)
         self.material.set_raytracer(lambda o,d: self.trace(o,d))
 
-        RGBPIL = Image.open("normal.png")
-        self.RGB = torch.from_numpy(np.asarray(RGBPIL)*1.0/255).to('cuda')
         self.change_type = 'gaussian'
         self.change_eps = 0.05
 

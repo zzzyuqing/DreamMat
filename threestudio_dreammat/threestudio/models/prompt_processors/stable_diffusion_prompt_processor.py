@@ -24,14 +24,12 @@ class StableDiffusionPromptProcessor(PromptProcessor):
     def configure_text_encoder(self) -> None:
         self.tokenizer = AutoTokenizer.from_pretrained(
             self.cfg.pretrained_model_name_or_path, subfolder="tokenizer",
-            cache_dir=self.cfg.pretrained_model_cache_dir,
-            #local_files_only=True
+            cache_dir=self.cfg.pretrained_model_cache_dir
         )
         os.environ["TOKENIZERS_PARALLELISM"] = "false"
         self.text_encoder = CLIPTextModel.from_pretrained(
             self.cfg.pretrained_model_name_or_path, subfolder="text_encoder",
-            cache_dir=self.cfg.pretrained_model_cache_dir,
-            #local_files_only=True
+            cache_dir=self.cfg.pretrained_model_cache_dir
         ).to(self.device)
 
         for p in self.text_encoder.parameters():
@@ -78,15 +76,13 @@ class StableDiffusionPromptProcessor(PromptProcessor):
         os.environ["TOKENIZERS_PARALLELISM"] = "false"
         tokenizer = AutoTokenizer.from_pretrained(
             pretrained_model_name_or_path, subfolder="tokenizer",
-            cache_dir=pretrained_model_cache_dir,
-            #local_files_only=True
+            cache_dir=pretrained_model_cache_dir
         )
         text_encoder = CLIPTextModel.from_pretrained(
             pretrained_model_name_or_path,
             subfolder="text_encoder",
             device_map="auto",
-            cache_dir=pretrained_model_cache_dir,
-            #local_files_only=True
+            cache_dir=pretrained_model_cache_dir
         )
 
         with torch.no_grad():

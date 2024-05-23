@@ -5,7 +5,8 @@ DreamMat: High-quality PBR Material Generation with Geometry- and Light-aware Di
 ![](assets/teaser.png)
 
 ### Preparation for inference
-1. Install basic required packages.
+1. Install packages in `requirements.txt`.
+    We test our model on 3090/4090/V100/A6000 with 11.8 CUDA and 2.0.0 pytorch.
     ```
     git clone https://github.com/zzzyuqing/DreamMat.git
     cd DreamMat
@@ -29,7 +30,7 @@ DreamMat: High-quality PBR Material Generation with Geometry- and Light-aware Di
 
 ```
 cd threestudio_dreammat
-sh cmd/to_tencet_test.sh
+sh cmd/run_examples.sh
 ```
 ### Geometry- and Light-aware ControlNet
 ![](assets/pipeline_controlnet.png)

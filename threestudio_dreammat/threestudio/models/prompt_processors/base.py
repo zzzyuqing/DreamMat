@@ -41,13 +41,9 @@ class PromptProcessorOutput:
     null_text_embeddings: Float[Tensor, "N Nf"]
     text_embeddings_vd: Float[Tensor, "Nv N Nf"]
     uncond_text_embeddings_vd: Float[Tensor, "Nv N Nf"]
-    text_embeddings_env_vd:Float[Tensor,"Nv N Nf"]
-    text_embeddings_env:Float[Tensor,"Nv N Nf"]
-    uncond_text_embeddings_vd: Float[Tensor, "Nv N Nf"]
     directions: List[DirectionConfig]
     direction2idx: Dict[str, int]
     use_perp_neg: bool
-    use_env_prompt: bool
     perp_neg_f_sb: Tuple[float, float, float]
     perp_neg_f_fsb: Tuple[float, float, float]
     perp_neg_f_fs: Tuple[float, float, float]
@@ -59,8 +55,7 @@ class PromptProcessorOutput:
         azimuth: Float[Tensor, "B"],
         camera_distances: Float[Tensor, "B"],
         view_dependent_prompting: bool = True,
-        return_null_text_embeddings: bool = False,
-        env_id: Int[Tensor,"B"]=-1,
+        return_null_text_embeddings: bool = False
     ) -> Float[Tensor, "BB N Nf"]:
         batch_size = elevation.shape[0]
 
@@ -73,18 +68,10 @@ class PromptProcessorOutput:
                 ] = self.direction2idx[d.name]
 
             # Get text embeddings
-            if self.use_env_prompt:
-                assert(env_id!=-1)
-                text_embeddings = self.text_embeddings_env_vd[direction_idx*5+env_id]
-            else:
-                text_embeddings = self.text_embeddings_vd[direction_idx]  # type: ignore
+            text_embeddings = self.text_embeddings_vd[direction_idx]  # type: ignore
             uncond_text_embeddings = self.uncond_text_embeddings_vd[direction_idx]  # type: ignore
         else:
-            if self.use_env_prompt:
-                assert(env_id!=-1)
-                text_embeddings = self.text_embeddings_env[env_id].expand(batch_size, -1, -1)
-            else:
-                text_embeddings = self.text_embeddings.expand(batch_size, -1, -1)  # type: ignore
+            text_embeddings = self.text_embeddings.expand(batch_size, -1, -1)  # type: ignore
             uncond_text_embeddings = self.uncond_text_embeddings.expand(  # type: ignore
                 batch_size, -1, -1
             )
@@ -242,10 +229,6 @@ class PromptProcessor(BaseObject):
         # index of words that can potentially be removed
         prompt_debiasing_mask_ids: Optional[List[int]] = None
 
-        use_env_prompt:bool = False
-
-        env_prompts_path:str=None
-
     cfg: Config
 
     @rank_zero_only
@@ -337,19 +320,6 @@ class PromptProcessor(BaseObject):
         # use provided negative prompt
         self.negative_prompt = self.cfg.negative_prompt
 
-        if self.cfg.use_env_prompt:
-            self.env_prompts=[]
-            for i in range(5):
-                
-                pathtxt = self.cfg.env_prompts_path+"/map"+str(i+1)+"/prompt.txt"
-                with open(pathtxt) as f:
-                    lines = f.readlines()
-                    print(lines[0])
-                    f.close()
-                self.env_prompts.append(lines[0])
-        else:
-            self.env_prompts=None
-
         threestudio.info(
             f"Using prompt [{self.prompt}] and negative prompt [{self.negative_prompt}]"
         )
@@ -371,18 +341,6 @@ class PromptProcessor(BaseObject):
                 self.cfg.get(f"prompt_{d.name}", None) or d.prompt(self.prompt)  # type: ignore
                 for d in self.directions
             ]
-
-            self.prompts_env_vd=[]
-            self.prompts_env=[]
-
-            if self.cfg.use_env_prompt:
-                for d in self.directions:
-                    for env_prompt in self.env_prompts:
-                        self.prompts_env_vd.append(d.prompt(self.prompt)+", "+env_prompt)
-
-            
-                for env_prompt in self.env_prompts:
-                    self.prompts_env.append(self.prompt+", "+env_prompt)
 
         prompts_vd_display = " ".join(
             [
@@ -411,9 +369,8 @@ class PromptProcessor(BaseObject):
             [self.prompt]
             + [self.negative_prompt]
             + self.prompts_vd
-            + self.prompts_env
-            + self.prompts_env_vd
             + self.negative_prompts_vd
+            + [""]  # null text
         )
         prompts_to_process = []
         for prompt in all_prompts:
@@ -464,17 +421,6 @@ class PromptProcessor(BaseObject):
         self.text_embeddings_vd = torch.stack(
             [self.load_from_cache(prompt) for prompt in self.prompts_vd], dim=0
         )
-
-        if self.cfg.use_env_prompt:
-            self.text_embeddings_env_vd = torch.stack(
-                [self.load_from_cache(prompt) for prompt in self.prompts_env_vd], dim=0
-            )
-            self.text_embeddings_env = torch.stack(
-                [self.load_from_cache(prompt) for prompt in self.prompts_env], dim=0
-            )
-        else:
-            self.text_embeddings_env_vd=None
-            self.text_embeddings_env=None
         self.uncond_text_embeddings_vd = torch.stack(
             [self.load_from_cache(prompt) for prompt in self.negative_prompts_vd], dim=0
         )
@@ -523,13 +469,11 @@ class PromptProcessor(BaseObject):
 
         tokenizer = AutoTokenizer.from_pretrained(
             self.cfg.pretrained_model_name_or_path_prompt_debiasing,
-            cache_dir=self.cfg.pretrained_model_cache_dir,
-            #local_files_only=True
+            cache_dir=self.cfg.pretrained_model_cache_dir
         )
         model = BertForMaskedLM.from_pretrained(
             self.cfg.pretrained_model_name_or_path_prompt_debiasing,
-            cache_dir=self.cfg.pretrained_model_cache_dir,
-            #local_files_only=True
+            cache_dir=self.cfg.pretrained_model_cache_dir
         )
 
         views = [d.name for d in self.directions]
@@ -588,13 +532,10 @@ class PromptProcessor(BaseObject):
             uncond_text_embeddings=self.uncond_text_embeddings,
             null_text_embeddings=self.null_text_embeddings,
             text_embeddings_vd=self.text_embeddings_vd,
-            text_embeddings_env_vd=self.text_embeddings_env_vd,
-            text_embeddings_env = self.text_embeddings_env,
             uncond_text_embeddings_vd=self.uncond_text_embeddings_vd,
             directions=self.directions,
             direction2idx=self.direction2idx,
             use_perp_neg=self.cfg.use_perp_neg,
-            use_env_prompt=self.cfg.use_env_prompt,
             perp_neg_f_sb=self.cfg.perp_neg_f_sb,
             perp_neg_f_fsb=self.cfg.perp_neg_f_fsb,
             perp_neg_f_fs=self.cfg.perp_neg_f_fs,
