@@ -56,9 +56,9 @@ system:
     use_controlnet: true
     width: 512
     height: 512
-    cache_dir: "../../../model" # path to SD model
+    cache_dir: "model" # path to SD model
     pretrained_model_name_or_path: "stabilityai/stable-diffusion-2-1-base"
-    controlnet_path: "../../../model/controlnet" # path to controlnet
+    controlnet_path: "model/controlnet" # path to controlnet
     control_types: ['light']
     cond_scale: 1.05
     uncond_scale: [0, -1.0, -0.5, 2000]  
@@ -74,7 +74,7 @@ system:
   prompt_processor_type: "stable-diffusion-prompt-processor"
   prompt_processor:
     pretrained_model_name_or_path: "stabilityai/stable-diffusion-2-1-base" 
-    pretrained_model_cache_dir: "../../../model" # path to SD model
+    pretrained_model_cache_dir: "model" # path to SD model
     prompt: ???
     negative_prompt: "oversaturated color, ugly, tiling, poorly drawn hands, poorly drawn feet, poorly drawn face, poorly drawn eyes, low contrast, underexposed, overexposed, bright blue spots, glowing blue patches, intense blue highlights, Unrealistic highlights, Artificial shininess, Exaggerated light reflections, Unnatural facial expression, Inauthentic eye contact, low resolution"
 

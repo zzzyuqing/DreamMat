@@ -190,3 +190,7 @@ threestudio_dreammat/.code-workspace
 threestudio_dreammat/custom/*
 
 threestudio_dreammat/load/tets/256_tets.npz
+
+threestudio_dreammat/model/models--stabilityai--stable-diffusion-2-1-base
+
+threestudio_dreammat/model/controlnet
