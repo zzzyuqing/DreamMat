@@ -32,6 +32,8 @@ DreamMat: High-quality PBR Material Generation with Geometry- and Light-aware Di
 cd threestudio_dreammat
 sh cmd/run_examples.sh
 ```
+
+Upon initial execution, each model will undergo pre-rendering using Blender, with an approximate duration of 15 minutes on a 4090 GPU. During this period, there will be no output; thus, patience is requested. For subsequent runs, the `blender_generate` can be set to `false` to bypass this process.
 ### Geometry- and Light-aware ControlNet
 ![](assets/pipeline_controlnet.png)
 #### Preparation for training
