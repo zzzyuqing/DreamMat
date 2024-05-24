@@ -556,11 +556,9 @@ class FixCameraIterableDataset(IterableDataset, Updateable):
                 f" --num_images {self.cfg.fix_view_num}"
             )
             print(command)
-            import time
-            s_t = time.time()
+            print("pre-rendering light conditions...please wait for about 15min")
             subprocess.run(command, shell=True,stdout= subprocess.DEVNULL)
-            e_t = time.time()
-            print("rendering done, spend time :", e_t-s_t,'s')
+            print("rendering done")
 
         def loadrgb(imgpath,dim):
             img = cv2.imread(imgpath,cv2.IMREAD_UNCHANGED)
