@@ -133,16 +133,6 @@ class RandomCameraIterableDataset(IterableDataset, Updateable):
             (1 - r) * 0.0 + r * self.cfg.azimuth_range[0],
             (1 - r) * 0.0 + r * self.cfg.azimuth_range[1],
         ]
-        # self.camera_distance_range = [
-        #     (1 - r) * self.cfg.eval_camera_distance
-        #     + r * self.cfg.camera_distance_range[0],
-        #     (1 - r) * self.cfg.eval_camera_distance
-        #     + r * self.cfg.camera_distance_range[1],
-        # ]
-        # self.fovy_range = [
-        #     (1 - r) * self.cfg.eval_fovy_deg + r * self.cfg.fovy_range[0],
-        #     (1 - r) * self.cfg.eval_fovy_deg + r * self.cfg.fovy_range[1],
-        # ]
 
     def collate(self, batch) -> Dict[str, Any]:
         # sample elevation angles
@@ -244,14 +234,6 @@ class RandomCameraIterableDataset(IterableDataset, Updateable):
         )
         fovy = fovy_deg * math.pi / 180
 
-        # Ks: Float[Tensor, "B 3 3"]=torch.zeros((self.batch_size,3,3))
-        # for i in range(self.batch_size):
-        #     focal = fovy_to_focal(fovy[i], self.height)
-        #     Ks[i,...]= torch.tensor([
-        #         [focal, 0, 0.5 * self.width],
-        #         [0, focal, 0.5 * self.height],
-        #         [0, 0, 1]
-        #     ])
             
 
         # sample light distance from a uniform distribution bounded by light_distance_range
@@ -358,7 +340,6 @@ class RandomCameraIterableDataset(IterableDataset, Updateable):
 class FixCameraIterableDataset(IterableDataset, Updateable):
 
     def render_oneview_gt(self, view_id):
-        # 仅做测试用途，对齐blender渲染的图像和本系统的结果一致
 
         elevation_deg: Float[Tensor, "B"] = self.elevation_degs[view_id]
         elevation: Float[Tensor, "B"] = elevation_deg * math.pi / 180
@@ -476,18 +457,6 @@ class FixCameraIterableDataset(IterableDataset, Updateable):
 
     def render_fixview_imgs(self):
         envmap_dir = "load/lights/envmap"
-
-        # 渲染128个视角下的depth,normal,lightmap
-        # 已知的变量:
-            # self.mesh     (self.mesh.v_pos; self.mesh.v_nrm; self.mesh.v_uv; self.mesh.t_pos_idx分别是顶点位置，法线，uv和三角形顶点序号)
-            # self.cfg.fix_view_num = 128
-            # self.elevation_degs [128]     绕x轴旋转角度
-            # self.azimuth_degs [128]       绕y轴旋转角度
-            # self.fix_camera_distances [128]
-            # self.camera_perturbs [128,3]
-            # self.center_perturbs [128,3]
-            # self.up_perturbs [128,3]
-            # 具体的意义可以参考collate函数，有从这些量算c2w,w2c,mvp矩阵的过程
 
         if self.cfg.blender_generate:
 
@@ -611,32 +580,6 @@ class FixCameraIterableDataset(IterableDataset, Updateable):
                 light_m1r1=loadrgb(light_path_m1r1,dim)
                 self.lightmaps[view_idx, env_idx-1] = torch.from_numpy(np.concatenate([
                     light_m0r0, light_m0rhalf, light_m0r1, light_m1r0, light_m1rhalf, light_m1r1], axis=-1))
-            # for env_idx in range(6,7):
-            #     light_path_m0r0 =    self.temp_image_save_dir+"/light/"+f"{view_idx:03d}_m0.0r0.0_env"+str(env_idx)+".png"
-            #     light_path_m0rhalf = self.temp_image_save_dir+"/light/"+f"{view_idx:03d}_m0.0r0.5_env"+str(env_idx)+".png"
-            #     light_path_m0r1 =    self.temp_image_save_dir+"/light/"+f"{view_idx:03d}_m0.0r1.0_env"+str(env_idx)+".png"
-            #     light_path_m1r0 =    self.temp_image_save_dir+"/light/"+f"{view_idx:03d}_m1.0r0.0_env"+str(env_idx)+".png"
-            #     light_path_m1rhalf = self.temp_image_save_dir+"/light/"+f"{view_idx:03d}_m1.0r0.5_env"+str(env_idx)+".png"
-            #     light_path_m1r1 =    self.temp_image_save_dir+"/light/"+f"{view_idx:03d}_m1.0r1.0_env"+str(env_idx)+".png"
-            #     light_m0r0=loadrgb(light_path_m0r0,dim)
-            #     light_m0rhalf=loadrgb(light_path_m0rhalf,dim)
-            #     light_m0r1=loadrgb(light_path_m0r1,dim)
-            #     light_m1r0=loadrgb(light_path_m1r0,dim)
-            #     light_m1rhalf=loadrgb(light_path_m1rhalf,dim)
-            #     light_m1r1=loadrgb(light_path_m1r1,dim)
-            #     self.lightmaps[view_idx, 0] = torch.from_numpy(np.concatenate([
-            #         light_m0r0, light_m0rhalf, light_m0r1, light_m1r0, light_m1rhalf, light_m1r1], axis=-1))
-
-        
-        
-        # 注：normal的背景以blender那个蓝不蓝紫不紫的结果为准，以及我这里的normal是面法线，以你那里的顶点法线为准
-        # depth我这里做了变换，变换代码见452-457行，做完变换可以跟gt对比一下
-        # mask是不需要的，只是为了让你可以定量的比较一下结果
-        # 大致颜色和模型大小、角度对就行
-        #os.remove(pkl_path)
-        # 打断点代码，使用方法可以查一下ipdb
-        #import ipdb
-        #ipdb.set_trace()
 
     def set_fix_elevs(self) -> None:
         elevation_degs1 = (
@@ -929,15 +872,6 @@ class RandomCameraDataset(Dataset):
             elevation_deg, self.cfg.eval_fovy_deg
         )
         fovy = fovy_deg * math.pi / 180
-
-        # Ks: Float[Tensor, "B 3 3"]=torch.zeros((self.cfg.eval_batch_size,3,3))
-        # for i in range(self.cfg.eval_batch_size):
-        #     focal = fovy_to_focal(fovy[i], self.cfg.eval_height)
-        #     Ks[i,...]= torch.tensor([
-        #         [focal, 0, 0.5 * self.cfg.eval_width],
-        #         [0, focal, 0.5 * self.cfg.eval_height],
-        #         [0, 0, 1]
-        #     ])
 
         light_positions: Float[Tensor, "B 3"] = camera_positions
 

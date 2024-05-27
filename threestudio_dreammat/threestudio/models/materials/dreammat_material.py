@@ -282,11 +282,7 @@ def generate_ide_fn(deg_view):
     return integrated_dir_enc_fn
 
 def equirectangular_to_cubemap(equirectangular_img, cube_size):
-    # cv2.imwrite(f'eq.png', equirectangular_img.cpu().numpy() * 255)
-    # 创建一个空的立方体贴图
     cube_map = np.zeros((6, cube_size, cube_size, 3), dtype=np.float32)
-    # 对于立方体贴图的每个面
-
     def get_directions(face):
         if face == 0: 
             x_coord = np.linspace(-1, 1, cube_size)
@@ -294,25 +290,25 @@ def equirectangular_to_cubemap(equirectangular_img, cube_size):
             grid = np.meshgrid(x_coord, y_coord)
             u,v = grid
             w = np.full_like(u, 1)
-            return np.array([-w, u, -v]) #左
+            return np.array([-w, u, -v]) 
         if face == 1:
             x_coord = np.linspace(-1, 1, cube_size)
             y_coord = np.linspace(-1, 1, cube_size)
             grid = np.meshgrid(x_coord, y_coord)
             u,v = grid
             w = np.full_like(u, 1)
-            return np.array([w, -u, -v])#右
+            return np.array([w, -u, -v])
         if face == 2:
             x_coord = np.linspace(-1, 1, cube_size)
             y_coord = np.linspace(-1, 1, cube_size)
             grid = np.meshgrid(x_coord, y_coord)
             u,v = grid
             w = np.full_like(u, 1)
-            return np.array([-u, -w, -v])#后
+            return np.array([-u, -w, -v])
         if face == 3: 
             x_coord = np.linspace(-1, 1, cube_size)
             y_coord = np.linspace(-1, 1, cube_size)
-            grid = np.meshgrid(x_coord, y_coord)# 前
+            grid = np.meshgrid(x_coord, y_coord)
             u,v = grid
             w = np.full_like(u, 1)
             return np.array([u, w, -v])
@@ -322,16 +318,15 @@ def equirectangular_to_cubemap(equirectangular_img, cube_size):
             grid = np.meshgrid(x_coord, y_coord)
             u,v = grid
             w = np.full_like(u, 1)
-            return np.array([u, v, w])  # 上
+            return np.array([u, v, w])  
         if face == 5: 
             x_coord = np.linspace(-1, 1, cube_size)
             y_coord = np.linspace(-1, 1, cube_size)
             grid = np.meshgrid(x_coord, y_coord)
             u,v = grid
             w = np.full_like(u, 1)
-            return np.array([u, -v, -w])   # 下
+            return np.array([u, -v, -w])  
     for face in range(6):
-        # 获取当前面的方向
         directions = get_directions(face)
         directions /= np.linalg.norm(directions,axis=0,ord=2)
         theta = np.arccos(directions[2])
@@ -344,8 +339,6 @@ def equirectangular_to_cubemap(equirectangular_img, cube_size):
         x = (u * width) % width  # Ensure x is within image bounds
         y = (v * height) % height
         pixel_values = cv2.remap(equirectangular_img.cpu().numpy(), x.astype(np.float32), y.astype(np.float32), cv2.INTER_LINEAR, cv2.BORDER_WRAP)
-
-        # 将像素值复制到立方体贴图的对应面
         cube_map[face, :, :, :] = pixel_values
         cv2.imwrite(f'cube_{face}.png', (pixel_values * 255))
     return torch.from_numpy(cube_map).to('cuda')
@@ -441,36 +434,11 @@ class DreamMatMaterial(BaseMaterial):
         h,w,_=self.light[env_id].shape
         x=torch.floor(latitude*(w-1))
         y=torch.floor(longitude*(h-1))
-        # x=(w-1)-torch.floor(longitude*(w-1))
-        # y=(h-1)-torch.floor(latitude*(h-1))
-        return self.light[env_id][y.long(),x.long(),:]
-        # height,width,_=self.light[env_id].shape
-        # # x, y, z = directions[..., 0], directions[..., 1], directions[..., 2]
-        # # # Normalize the vectors (avoid division by zero)
-        # # r = torch.sqrt(x**2 + y**2 + z**2)
-        # # r = torch.clamp(r, min=1e-6)
-        
-        # directions = directions / directions.norm(p=2, dim=-1, keepdim=True)  # Normalize the vectors
-        # x, y, z = directions.unbind(-1)
-
-        # # Compute theta and phi
-        # theta = torch.acos(z)
-        # phi = torch.atan2(y, x) % (2 * np.pi)
-        
-        # u = phi / (2 * np.pi)
-        # v = theta / np.pi
-        # x = (u * width) % width  # Ensure x is within image bounds
-        # y = (v * height) % height
-
         return self.light[env_id][y.long(),x.long(),:]
     
     def get_envirmentlight_blender(self,directions,env_id):
 
         height,width,_=self.light[env_id].shape
-        # x, y, z = directions[..., 0], directions[..., 1], directions[..., 2]
-        # # Normalize the vectors (avoid division by zero)
-        # r = torch.sqrt(x**2 + y**2 + z**2)
-        # r = torch.clamp(r, min=1e-6)
         
         directions = directions / directions.norm(p=2, dim=-1, keepdim=True)  # Normalize the vectors
         x, y, z = directions.unbind(-1)
@@ -645,14 +613,11 @@ class DreamMatMaterial(BaseMaterial):
         return geometry
 
     def shade_raytracing(self, pts, normals, view_dirs, env_id, metallic, roughness, albedo, is_train):
-        # metallic=torch.ones_like(metallic)
-        # roughness=torch.zeros_like(roughness)
         if(torch.isnan(roughness).any()==True):
             import ipdb
             ipdb.set_trace()
 
         reflections = torch.sum(view_dirs * normals, -1, keepdim=True) * normals * 2 - view_dirs
-        #F0 = 0.04*torch.ones_like(albedo).to(self.device) # for diffuse
         F0 = 0.04 * (1 - metallic) + metallic * albedo # [pn,1]
 
         # sample diffuse directions
@@ -693,24 +658,17 @@ class DreamMatMaterial(BaseMaterial):
         specular_colors = torch.mean(fresnel * specular_lights, 1)
         specular_weights = specular_weights * fresnel
 
-        # diffuse only consider diffuse directions
-        #kd = (1 - metallic.unsqueeze(1)) * (1-fresnel)
-        kd = 1 - metallic.unsqueeze(1)
         diffuse_lights = lights[:,:diffuse_num]
-        diffuse_colors = albedo.unsqueeze(1) * diffuse_lights #* kd[:,:diffuse_num] 
+        diffuse_colors = albedo.unsqueeze(1) * diffuse_lights 
         diffuse_colors = torch.mean(diffuse_colors, 1)
 
         colors = diffuse_colors + specular_colors
-        #colors = colors.clamp(0.0, 1.0)
         colors=get_activation("lin2srgb")(colors)
         outputs={}
         outputs['color']=colors
         outputs['albedo'] = get_activation("lin2srgb")(albedo.detach())
-        #outputs['albedo'] = albedo
         outputs['roughness'] = torch.sqrt(roughness + 1e-7)
         outputs['metalness'] = metallic
-        # outputs['specular_lights'] = torch.clamp(torch.mean(lights[:,diffuse_num:,:], dim=1),min=0,max=1)
-        # outputs['diffuse_lights'] = torch.clamp(torch.mean(diffuse_lights, dim=1),min=0,max=1)
         outputs['specular_lights'] = get_activation("lin2srgb")(torch.mean(lights[:,diffuse_num:,:].detach(),dim=1))
         outputs['diffuse_lights'] = get_activation("lin2srgb")(torch.mean(lights[:,:diffuse_num,:].detach(),dim=1))
         outputs['specular_colors'] = get_activation("lin2srgb")(specular_colors.detach())
@@ -740,14 +698,6 @@ class DreamMatMaterial(BaseMaterial):
 
         color = diffuse_albedo * diffuse_light + specular_albedo * specular_light
         color = color.clamp(0.0, 1.0)
-
-        # outputs={}
-        # outputs['color']=color
-        # outputs['albedo'] = albedo
-        # outputs['roughness'] = roughness
-        # outputs['metalness'] = metallic
-        # outputs['specular_lights'] = torch.clamp(specular_light,min=0,max=1)
-        # outputs['diffuse_lights'] = torch.clamp(diffuse_light,min=0,max=1)
 
         outputs={}
         outputs['color']=color

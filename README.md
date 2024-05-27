@@ -23,7 +23,7 @@ DreamMat: High-quality PBR Material Generation with Geometry- and Light-aware Di
     ```
 
 
-3. Download the pre-trained ControlNet checkpoints [here](https://pan.zju.edu.cn/share/5b7f4cd191248e775e693291a7) or from hugging face, and put it to the `threestudio_dreammat/model/controlnet`
+3. Download the pre-trained ControlNet checkpoints [here](https://pan.zju.edu.cn/share/78d6588ec65bcfa432ed22d262) or from [hugging face](https://huggingface.co/zzzyuqing/light-geo-controlnet), and put it to the `threestudio_dreammat/model/controlnet`
 
 
 ### Inference
