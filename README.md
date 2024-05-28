@@ -1,6 +1,6 @@
 # DreamMat
 DreamMat: High-quality PBR Material Generation with Geometry- and Light-aware Diffusion Models
-## [Paper](https://arxiv.org) | [Project page](https://zzzyuqing.github.io/dreammat.github.io/) | [Dataset](https://zzzyuqing.github.io/dreammat.github.io/) | [Video](https://zzzyuqing.github.io/dreammat.github.io/) 
+## [Paper](https://arxiv.org/abs/2405.17176) | [Project page](https://zzzyuqing.github.io/dreammat.github.io/)
 
 ![](assets/teaser.png)
 
