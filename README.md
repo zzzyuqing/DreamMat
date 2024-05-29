@@ -137,6 +137,9 @@ We have intensively borrow codes from the following repositories. Many thanks to
 - [diffusers](https://github.com/huggingface/diffusers)
 - [ControlNet](https://github.com/lllyasviel/ControlNet)
 
+We express our profound gratitude to [Ziyi Yang](https://github.com/ingra14m) for his insightful discussions during the project, and to Lei Yang for his comprehensive coordination and planning. This research work was supported by Information Technology Center and Tencent Lightspeed Studios.
+Concurrently, we are also exploring more advanced 3D representation and inverse rendering technologies such as [Spec-Gaussian](https://github.com/ingra14m/Specular-Gaussians) and [SIRe-IR](https://github.com/ingra14m/SIRe-IR).
+
 ## Citation
 If you find this repository useful in your project, please cite the following work. :)
 ```
