@@ -137,6 +137,26 @@ We have intensively borrow codes from the following repositories. Many thanks to
 - [diffusers](https://github.com/huggingface/diffusers)
 - [ControlNet](https://github.com/lllyasviel/ControlNet)
 
+In addition to the 3D model from [Objaverse](https://objaverse.allenai.org/), we express our profound appreciation to the contributors of the following 3D models:
+- [Bobcat machine](https://sketchfab.com/3d-models/bobcat-machine-7845344823cb4cdcb99963f561e5d866) by mohamed ouartassi.
+- [Molino De Viento \_ Windmill](https://sketchfab.com/3d-models/molino-de-viento---windmill-2ea0a5296d4b49dbad71ce1975c0e3ff) by BC-X.
+- [MedivalHouse | house for living | MedivalVilage](https://sketchfab.com/3d-models/medivalhousehouse-for-livingmedivalvilage-ba53607959b0476fb719043c406bc245) by JFred-chill.
+- [Houseleek plant](https://sketchfab.com/3d-models/houseleek-plant-70679a304b324ca8941c214875acf6a9) by matousekfoto.
+- [Jagernaut (Beyond Human)](https://sketchfab.com/3d-models/jagernaut-beyond-human-977e3a466dbc4c859071e342c6b6151e) by skartemka.
+- [Grabfigur](https://sketchfab.com/3d-models/grabfigur-fbd44dd62766450abefaa0e43941633e) by noe-3d.at.
+- [Teenage Mutant Ninja Turtles - Raphael](https://sketchfab.com/3d-models/teenage-mutant-ninja-turtles-raphael-191f64c3a6a44218a98a4d93f44229a9) by Hellbruch. 
+- [Cat with jet pack](https://sketchfab.com/3d-models/cat-with-jet-pack-9afc8fd58c0d4f7d827f2007d6ac1e80) by Muru.
+- [Transformers Universe: Autobot Showdown](https://sketchfab.com/3d-models/transformers-universe-autobot-showdown-7a3f2d273f354b29b31f247beb62d973) by Primus03.
+- [PigMan](https://sketchfab.com/3d-models/pigman-f7597d3af7224f7e890710ac27d4d597) by Grigorii Ischenko.
+- [Bulky Knight](https://sketchfab.com/3d-models/bulky-knight-002a90cbf12941b792f9685546a7502c) by Arthur Krut.
+- [Sir Frog](https://sketchfab.com/3d-models/sir-frog-chrono-trigger-0af0c15e947143be8fab274841764bf1) by Adrian Carter.
+- [Infantry Helmet](https://sketchfab.com/3d-models/infantry-helmet-ba3a571a8077417f80ae0e06150c91d2) by Masonsmith2020.
+- [Sailing Ship Model](https://sketchfab.com/3d-models/sailing-ship-model-ac65e0168e8c423db9c9fdc71397c84e) by Andrea Spognetta (Spogna). 
+- [Venice Mask](https://sketchfab.com/3d-models/venice-mask-4aace12762ee44cf97d934a6ced12e65) by DailyArt.
+- [Bouddha Statue Photoscanned](https://sketchfab.com/3d-models/bouddha-statue-photoscanned-2d71e5b04f184ef89130eb26bc726add) by amcgi.
+- [Bunny](https://sketchfab.com/3d-models/bunny-c362411a4a744b6bb18ce4ffcf4e7f43) by vivienne0716.
+- [Wooden Shisa (Okinawan Guardian Lion)](https://www.artstation.com/artwork/LVvnk) by Vlad Erium.
+
 We express our profound gratitude to [Ziyi Yang](https://github.com/ingra14m) for his insightful discussions during the project, and to Lei Yang for his comprehensive coordination and planning. This research work was supported by Information Technology Center and Tencent Lightspeed Studios.
 Concurrently, we are also exploring more advanced 3D representation and inverse rendering technologies such as [Spec-Gaussian](https://github.com/ingra14m/Specular-Gaussians) and [SIRe-IR](https://github.com/ingra14m/SIRe-IR).
 
