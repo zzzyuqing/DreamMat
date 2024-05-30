@@ -155,6 +155,8 @@ In addition to the 3D model from [Objaverse](https://objaverse.allenai.org/), we
 - [Venice Mask](https://sketchfab.com/3d-models/venice-mask-4aace12762ee44cf97d934a6ced12e65) by DailyArt.
 - [Bouddha Statue Photoscanned](https://sketchfab.com/3d-models/bouddha-statue-photoscanned-2d71e5b04f184ef89130eb26bc726add) by amcgi.
 - [Bunny](https://sketchfab.com/3d-models/bunny-c362411a4a744b6bb18ce4ffcf4e7f43) by vivienne0716.
+- [Baby Animals Statuettes](https://sketchfab.com/3d-models/baby-animals-statuettes-cadc2617612d47468e92360960583dc9) by Andrei Alexandrescu.
+- [Durian The King of Fruits](https://sketchfab.com/3d-models/durian-the-king-of-fruits-62cc563e52514fa9b2e3dfdfc09e5377) by Laithai.
 - [Wooden Shisa (Okinawan Guardian Lion)](https://www.artstation.com/artwork/LVvnk) by Vlad Erium.
 
 We express our profound gratitude to [Ziyi Yang](https://github.com/ingra14m) for his insightful discussions during the project, and to Lei Yang for his comprehensive coordination and planning. This research work was supported by Information Technology Center and Tencent Lightspeed Studios.
