@@ -635,8 +635,7 @@ def main(args):
     )
 
     logger.info("Initializing controlnet weights from unet")
-    #controlnet = ControlNetModel.from_unet(unet)
-    controlnet = ControlNetModel.from_unet_inchannel(unet, conditioning_channels=22)
+    controlnet = ControlNetModel.from_unet(unet, conditioning_channels=22)
 
     # `accelerate` 0.16.0 will have better support for customized saving
     if version.parse(accelerate.__version__) >= version.parse("0.16.0"):
