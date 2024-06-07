@@ -24,7 +24,7 @@ DreamMat: High-quality PBR Material Generation with Geometry- and Light-aware Di
 
 
 3. Download the pre-trained ControlNet checkpoints [here](https://pan.zju.edu.cn/share/78d6588ec65bcfa432ed22d262) or from [hugging face](https://huggingface.co/zzzyuqing/light-geo-controlnet), and put it to the `threestudio_dreammat/model/controlnet`
-
+4. A docker env can be found at https://hub.docker.com/repository/docker/zzzyuqing/dreammat_image/general
 
 ### Inference
 
@@ -117,7 +117,7 @@ training_data
 |-- ...
 
 ```
-We provide several data as examples [here]().
+We provide several data as examples [here](https://pan.zju.edu.cn/share/b1724c30e0b5a3a9861a58570e).
 
 run the training
 ```bash
