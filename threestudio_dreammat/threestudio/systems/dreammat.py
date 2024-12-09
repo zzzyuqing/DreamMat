@@ -179,7 +179,7 @@ class DreamMat(BaseLift3DSystem):
                 )
         return {"loss": loss}
 
-    def validation_step(self, batch):
+    def validation_step(self, batch, batch_idx):
         out = self(batch)
         srgb=out["comp_rgb"][0].detach()
         self.save_image_grid(
@@ -244,7 +244,7 @@ class DreamMat(BaseLift3DSystem):
     def on_validation_epoch_end(self):
         pass
 
-    def test_step(self, batch):
+    def test_step(self, batch, batch_idx):
         out = self(batch)
         srgb=out["comp_rgb"][0].detach()
         self.save_image_grid(
